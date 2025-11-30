@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Love Story</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: 'Helvetica Neue', sans-serif; background-color: #fff5f7; color: #444; margin: 0; padding: 0; }
+        .hero { background: #ff758c; color: white; padding: 60px 20px; text-align: center; }
+        .hero h1 { margin: 0; font-size: 3em; }
+        
+        .timeline { max-width: 700px; margin: 40px auto; padding: 0 20px; }
+        
+        .memory-card { 
+            background: white; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+            margin-bottom: 40px; 
+        }
+        
+        .memory-img { width: 100%; height: auto; display: block; }
+        
+        .content { padding: 25px; }
+        .date { color: #ff758c; font-weight: bold; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .title { margin: 10px 0; font-size: 1.8em; color: #333; }
+        .desc { line-height: 1.6; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>Our Journey</h1>
+        <p>From the beginning until now</p>
+    </div>
+
+    <div class="timeline">
+        {% for memory in memories %}
+            <div class="memory-card">
+                <!-- This loads the image from your static folder -->
+                <img src="{% static memory.image %}" class="memory-img" alt="{{ memory.title }}">
+                
+                <div class="content">
+                    <div class="date">{{ memory.date|date:"F j, Y" }}</div>
+                    <h2 class="title">{{ memory.title }}</h2>
+                    <p class="desc">{{ memory.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
