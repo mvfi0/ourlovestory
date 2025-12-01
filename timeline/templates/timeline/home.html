@@ -14,6 +14,22 @@
             color: #fff; 
             margin: 0; padding: 0; overflow-x: hidden;
             scroll-behavior: smooth;
+            min-height: 100vh;
+        }
+
+        /* --- STARS BACKGROUND (FIXED) --- */
+        @keyframes move-stars { from { background-position: 0 0, 40px 60px, 130px 270px; } to { background-position: 550px 550px, 390px 410px, 380px 520px; } }
+        
+        .stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            animation: move-stars 60s linear infinite;
+            z-index: -1; pointer-events: none;
         }
 
         /* --- HERO SECTION --- */
@@ -28,145 +44,131 @@
             position: relative;
             z-index: 10;
         }
-
-        /* Star Animation */
-        @keyframes move-stars {
-            from { background-position: 0 0, 40px 60px, 130px 270px; }
-            to { background-position: 550px 550px, 390px 410px, 380px 520px; }
-        }
-        .stars {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
-            animation: move-stars 60s linear infinite; z-index: -1;
-        }
+        
         .hero-title { font-size: 3.5em; font-weight: 700; margin: 0; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
-        .hero-subtitle {
-            font-size: 2.5em; font-weight: 700; margin: 10px 0; min-height: 1.2em; 
-            background: linear-gradient(90deg, #ff758c, #ff7eb3);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            transition: opacity 1s ease-in-out; opacity: 1;
+        
+        /* --- FIXED: TITLE ANIMATION CSS --- */
+        .hero-subtitle { 
+            font-size: 2.5em; 
+            font-weight: 700; 
+            margin: 10px 0; 
+            min-height: 1.2em; /* Mencegah layout lompat */
+            background: linear-gradient(90deg, #ff758c, #ff7eb3); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            
+            /* INI YANG HILANG SEBELUMNYA: */
+            transition: opacity 1s ease-in-out;
+            opacity: 1;
         }
-        .hero-subtitle.fade-out { opacity: 0; }
-        .cta-button {
-            background: linear-gradient(90deg, #e75973, #b84592); color: white; padding: 15px 40px;
-            border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 30px; border: none;
-            cursor: pointer; transition: transform 0.3s;
+
+        .hero-subtitle.fade-out {
+            opacity: 0;
         }
+        /* ---------------------------------- */
+
+        .cta-button { background: linear-gradient(90deg, #e75973, #b84592); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 30px; border: none; cursor: pointer; transition: transform 0.3s; }
         .cta-button:hover { transform: translateY(-5px); }
 
         /* --- FLASHBACK SECTION (SORE STYLE) --- */
         #flashback-section {
-            height: 100vh; /* Full Screen */
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #000;
+            height: 100vh;
+            display: none; 
             position: relative;
+            background-color: #000;
             overflow: hidden;
             opacity: 0;
             transition: opacity 2s ease-in-out;
+            perspective: 1000px;
         }
 
         #flashback-section.active {
             display: flex;
-            opacity: 1;
-        }
-
-        /* Container for the image to handle blurring edges */
-        .flashback-container {
-            position: relative;
-            width: 80%;
-            max-width: 800px;
-            height: 60vh;
-            display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        /* The Vignette / Blur Edge Effect */
-        .flashback-container::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            /* Inner shadow to create the darkened/blurred edge look */
-            box-shadow: inset 0 0 80px 40px #000; 
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .flashback-img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 5px;
-            /* Initial state for animation */
-            opacity: 0;
-            transform: scale(1);
-            transition: opacity 0.8s ease-in-out, transform 4s ease;
-            filter: sepia(30%) contrast(1.1); /* Sedikit efek film jadul */
-        }
-
-        .flashback-img.show {
             opacity: 1;
         }
-        
-        /* Peak Animation: Zoom in slowly */
-        .flashback-img.peak-zoom {
-            transform: scale(1.1);
+
+        .main-memory-container {
+            position: relative;
+            z-index: 10;
+            width: 300px;
+            height: 400px;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.5);
+            background: #000;
+        }
+
+        .main-flashback-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .main-flashback-img.show { opacity: 1; }
+
+        #flying-photos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        .flying-photo {
+            position: absolute; opacity: 0; border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            filter: grayscale(40%) sepia(20%);
+        }
+
+        .vignette-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, #000 100%);
+            z-index: 5; pointer-events: none;
         }
 
         .flashback-text {
-            margin-top: 30px;
-            font-size: 1.5em;
-            color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
-            z-index: 3;
-            letter-spacing: 3px;
+            position: absolute; bottom: 10%; font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.8); letter-spacing: 5px;
+            text-transform: uppercase; z-index: 20;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
-        /* --- TIMELINE STYLES --- */
+        /* --- TIMELINE SECTION --- */
         .timeline-section { max-width: 1100px; margin: 0 auto; padding: 100px 20px; display: flex; flex-direction: column; gap: 120px; }
         .memory-row { display: flex; align-items: center; justify-content: space-between; gap: 50px; opacity: 0; transition: opacity 1s ease-out, transform 1s ease-out; }
         .memory-row.reverse { flex-direction: row-reverse; }
         .memory-content { flex: 1; transform: translateY(30px); transition: transform 1s ease-out; }
         .memory-badge { display: inline-block; background: rgba(255, 117, 140, 0.2); color: #ff758c; padding: 8px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 600; margin-bottom: 20px; border: 1px solid rgba(255, 117, 140, 0.3); }
-        .memory-title { font-size: 2.5em; margin: 0 0 15px 0; font-weight: 700; line-height: 1.2; }
+        .memory-title { font-size: 2.5em; margin: 0 0 15px 0; font-weight: 700; }
         .memory-desc { color: #b0b0b0; font-size: 1.1em; line-height: 1.8; margin-bottom: 25px; }
-        .memory-meta { display: flex; align-items: center; gap: 10px; color: #888; font-size: 0.9em; }
         .memory-image-wrapper { flex: 1; position: relative; transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-        .memory-img { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s; display: block; }
-        .memory-img:hover { transform: scale(1.02); }
+        .memory-img { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); display: block; }
         .memory-row:not(.reverse) .memory-image-wrapper { transform: translateX(100px); }
         .memory-row.reverse .memory-image-wrapper { transform: translateX(-100px); }
         .memory-row.visible { opacity: 1; }
         .memory-row.visible .memory-content { transform: translateY(0); }
         .memory-row.visible .memory-image-wrapper { transform: translateX(0); }
 
-        /* --- MUSIC & RESPONSIVE --- */
+        /* --- MUSIC SECTION --- */
         .music-section { padding: 80px 20px 120px 20px; text-align: center; }
+        .music-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: 0.85em; margin-bottom: 15px; color: #ff758c; }
+        .music-title { font-size: 2.5em; margin: 0; background: linear-gradient(90deg, #ff758c, #ff7eb3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+        .music-subtitle { color: #ccc; margin-top: 10px; margin-bottom: 50px; font-size: 0.95em; }
+        .music-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; width: 300px; padding: 20px; margin: 0 auto; text-align: left; transition: transform 0.3s; }
+        .music-card:hover { transform: translateY(-5px); }
+        .album-art { width: 100%; aspect-ratio: 1/1; background: linear-gradient(135deg, #e75973, #b84592); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .play-btn-card { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; }
+        .play-btn-card:hover { background: rgba(255,255,255,0.1); border-color: #ff758c; }
+
         .music-control { position: fixed; bottom: 30px; right: 30px; z-index: 1000; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 15px rgba(255, 117, 140, 0.4); transition: transform 0.3s; }
         .music-control.playing .music-icon { animation: spin 3s linear infinite; }
         .music-icon { width: 24px; height: 24px; fill: #ff758c; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        /* Layout Mobile */
+
         @media (max-width: 768px) {
             .hero-title { font-size: 2.5em; }
             .memory-row { flex-direction: column-reverse !important; gap: 30px; margin-bottom: 80px; }
             .memory-row .memory-image-wrapper { transform: translateY(50px) !important; width: 100%; }
             .memory-row.visible .memory-image-wrapper { transform: translateY(0) !important; }
-            .memory-content { width: 100%; text-align: center; }
-            .memory-meta { justify-content: center; }
-            .flashback-container { width: 100%; height: 50vh; }
+            .main-memory-container { width: 250px; height: 350px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="stars"></div>
 
     <audio id="bg-music" loop>
         <source src="{% static 'timeline/music.mp3' %}" type="audio/mpeg">
@@ -179,9 +181,8 @@
     </div>
 
     <div class="hero-section">
-        <div class="stars"></div>
-        <h1 class="hero-title">Website Kenangan</h1>
-        <h2 class="hero-subtitle" id="dynamic-title">Aku dan Dia</h2>
+        <h1 class="hero-title">Our Love Story</h1>
+        <h2 class="hero-subtitle" id="dynamic-title">Vegard dan Mauri</h2>
         <p style="max-width: 600px; line-height: 1.6; color: #ccc;">
             Tempat menyimpan cerita, foto, dan lagu favorit kita berdua.
         </p>
@@ -197,7 +198,7 @@
                     <div class="memory-badge">Kenangan #{{ forloop.counter }}</div>
                     <h2 class="memory-title">{{ memory.title }}</h2>
                     <p class="memory-desc">{{ memory.description }}</p>
-                    <div class="memory-meta">
+                    <div style="display:flex; gap:10px; color:#888; font-size:0.9em; align-items:center;">
                         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span>{{ memory.date|date:"d F Y" }}</span>
                     </div>
@@ -210,59 +211,73 @@
     </div>
 
     <div id="flashback-section">
-        <div class="flashback-container">
-            <img id="flashback-img" class="flashback-img" src="" alt="Memory">
+        <div class="vignette-overlay"></div>
+        <div id="flying-photos-container"></div>
+        <div class="main-memory-container">
+            <img id="main-flashback-img" class="main-flashback-img" src="" alt="Main Memory">
         </div>
         <div class="flashback-text">Mengulang Waktu...</div>
     </div>
 
     <section class="music-section">
-        <h1 style="font-size: 2.5em; font-weight: 700; margin: 0; background: linear-gradient(90deg, #ff758c, #ff7eb3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lagu Favorit Kita 🎵</h1>
-        <p style="color: #ccc; margin-top: 10px;">Terbuang Dalam Waktu - Barasuara</p>
+        <div class="music-badge">Our Playlist</div>
+        <h1 class="music-title">Lagu Favorit Kita 🎵</h1>
+        <p class="music-subtitle">Setiap lagu punya cerita dan kenangan tersendiri</p>
+
+        <div class="music-card">
+            <div class="album-art">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            <h3 style="font-size:1.2em; font-weight:700; margin:0; color:white;">Terbuang Dalam Waktu</h3>
+            <p style="color:#aaa; font-size:0.9em; margin:5px 0 20px 0;">Barasuara</p>
+            <button class="play-btn-card" onclick="toggleMusic()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white" id="card-play-icon"><path d="M8 5v14l11-7z"/></svg>
+                <span id="card-play-text">Play Song</span>
+            </button>
+        </div>
     </section>
 
     <script>
-        /* --- DATA FLASHBACK DARI VIEWS.PY --- */
-        // Mengubah list python menjadi array javascript
+        /* --- FLASHBACK PHOTOS ARRAY --- */
         const flashbackPhotos = [
             {% for photo in flashback_photos %}
                 "{% static photo %}",
             {% endfor %}
         ];
 
-        /* --- LOGIC: AUDIO & FLASHBACK TRIGGER --- */
+        /* --- AUDIO & TRIGGER LOGIC --- */
         const music = document.getElementById('bg-music');
         const musicBtn = document.querySelector('.music-control');
+        const cardPlayText = document.getElementById('card-play-text');
         
-        // Element Flashback
         const flashbackSection = document.getElementById('flashback-section');
-        const flashbackImg = document.getElementById('flashback-img');
+        const mainFlashbackImg = document.getElementById('main-flashback-img');
+        const flyingContainer = document.getElementById('flying-photos-container');
         
         let isFlashbackActive = false;
-        let photoInterval;
+        let mainPhotoInterval;
+        let flyingPhotoInterval;
         let photoIndex = 0;
 
-        // Trigger Times (dalam detik)
-        const TIME_START_FADE = 144; // 2:24 (Persiapan)
-        const TIME_INITIAL = 145;    // 2:25 (Mulai & Jump)
-        const TIME_PEAK = 159;       // 2:39 (Puncak emosi)
-        const TIME_END = 177;        // 2:57 (Selesai)
+        const TIME_START_FADE = 144;
+        const TIME_INITIAL = 145;
+        const TIME_PEAK = 159;
+        const TIME_END = 177;
 
         music.addEventListener('timeupdate', () => {
             const t = music.currentTime;
 
-            // 1. PHASE 1: START (2:25)
             if (t >= TIME_INITIAL && t < TIME_END && !isFlashbackActive) {
                 startFlashbackSequence();
             }
 
-            // 2. PHASE 2: PEAK (2:39)
             if (t >= TIME_PEAK && t < TIME_END && isFlashbackActive) {
-                // Tambahkan class zoom untuk efek lebih dramatis
-                flashbackImg.classList.add('peak-zoom');
+                document.querySelector('.main-memory-container').style.transform = "scale(1.15) rotate(2deg)";
+                document.querySelector('.main-memory-container').style.transition = "transform 10s ease";
             }
 
-            // 3. PHASE 3: END (2:57)
             if (t >= TIME_END && isFlashbackActive) {
                 stopFlashbackSequence();
             }
@@ -270,73 +285,98 @@
 
         function startFlashbackSequence() {
             isFlashbackActive = true;
-            
-            // Tampilkan section
             flashbackSection.classList.add('active');
-            
-            // PAKSA SCROLL / JUMP ke section ini
             flashbackSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            // Mulai slideshow foto
-            changePhoto(); // Foto pertama langsung
-            photoInterval = setInterval(changePhoto, 1000); // Ganti setiap 1 detik
+            changeMainPhoto();
+            mainPhotoInterval = setInterval(changeMainPhoto, 1200);
+            createFlyingPhoto();
+            flyingPhotoInterval = setInterval(createFlyingPhoto, 400);
         }
 
-        function changePhoto() {
-            // Fade out sebentar
-            flashbackImg.classList.remove('show');
-            
+        function changeMainPhoto() {
+            mainFlashbackImg.classList.remove('show');
             setTimeout(() => {
-                // Ganti source gambar
-                flashbackImg.src = flashbackPhotos[photoIndex];
-                
-                // Fade in kembali
-                flashbackImg.classList.add('show');
-                
-                // Pindah index (looping)
+                mainFlashbackImg.src = flashbackPhotos[photoIndex];
+                mainFlashbackImg.classList.add('show');
                 photoIndex = (photoIndex + 1) % flashbackPhotos.length;
-            }, 200); // Waktu transisi singkat agar halus
+            }, 300);
+        }
+
+        function createFlyingPhoto() {
+            const img = document.createElement('img');
+            const randomSrc = flashbackPhotos[Math.floor(Math.random() * flashbackPhotos.length)];
+            img.src = randomSrc;
+            img.classList.add('flying-photo');
+
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 100;
+            const size = Math.random() * 150 + 100;
+            
+            img.style.left = startX + 'vw';
+            img.style.top = startY + 'vh';
+            img.style.width = size + 'px';
+            
+            const rotation = Math.random() * 360;
+            img.style.transform = `rotate(${rotation}deg) scale(0)`;
+            flyingContainer.appendChild(img);
+
+            const animationDuration = Math.random() * 3000 + 3000;
+
+            const keyframes = [
+                { transform: `rotate(${rotation}deg) scale(0)`, opacity: 0 },
+                { transform: `rotate(${rotation + 40}deg) scale(1)`, opacity: 0.6, offset: 0.2 },
+                { transform: `rotate(${rotation + 100}deg) scale(1.5) translateZ(100px)`, opacity: 0 }
+            ];
+
+            const anim = img.animate(keyframes, {
+                duration: animationDuration,
+                easing: 'ease-out'
+            });
+
+            anim.onfinish = () => img.remove();
         }
 
         function stopFlashbackSequence() {
             isFlashbackActive = false;
-            clearInterval(photoInterval);
-            
-            // Sembunyikan section perlahan
+            clearInterval(mainPhotoInterval);
+            clearInterval(flyingPhotoInterval);
+            flyingContainer.innerHTML = '';
+            document.querySelector('.main-memory-container').style.transform = "scale(1)";
             flashbackSection.style.opacity = '0';
-            
             setTimeout(() => {
                 flashbackSection.classList.remove('active');
-                flashbackSection.style.opacity = ''; // Reset CSS
-                
-                // Opsional: Scroll balik ke timeline atau biarkan user scroll sendiri
+                flashbackSection.style.opacity = '';
                 document.getElementById('timeline').scrollIntoView({ behavior: 'smooth' });
             }, 2000);
         }
 
-        // --- STANDARD JS (Title Loop, Scroll Reveal, Music Btn) ---
         function toggleMusic() {
             if (music.paused) {
                 music.play();
                 musicBtn.classList.add('playing');
+                cardPlayText.textContent = "Pause Song";
             } else {
                 music.pause();
                 musicBtn.classList.remove('playing');
+                cardPlayText.textContent = "Play Song";
             }
         }
 
-        const titles = [ "Cerita Kita", "Suka dan Duka", "Vegard dan Mauri" ];
+        /* --- TITLE LOOP ANIMATION (FIXED) --- */
+        const titles = [ "Untuk Aku dan Kamu.", "Our Story.", "Creating Memories." ];
         let titleIdx = 0;
         const titleEl = document.getElementById('dynamic-title');
+        
         setInterval(() => {
             titleEl.classList.add('fade-out');
             setTimeout(() => {
                 titleIdx = (titleIdx + 1) % titles.length;
                 titleEl.textContent = titles[titleIdx];
                 titleEl.classList.remove('fade-out');
-            }, 1000); 
-        }, 4000);
+            }, 1000); // Tunggu 1 detik (sama dengan durasi CSS transition) lalu ganti teks
+        }, 4000); // Ulangi setiap 4 detik
 
+        /* --- SCROLL REVEAL --- */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('visible');
