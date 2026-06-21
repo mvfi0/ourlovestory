@@ -5,24 +5,23 @@
 <head>
     <title>Our Love Story</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* --- GLOBAL STYLES --- */
-        body { 
-            font-family: 'Poppins', sans-serif; 
+        /* --- GLOBAL --- */
+        body {
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-            color: #fff; 
+            color: #fff;
             margin: 0; padding: 0; overflow-x: hidden;
             scroll-behavior: smooth;
             min-height: 100vh;
         }
 
-        /* --- STARS BACKGROUND (FIXED) --- */
+        /* --- STARS --- */
         @keyframes move-stars { from { background-position: 0 0, 40px 60px, 130px 270px; } to { background-position: 550px 550px, 390px 410px, 380px 520px; } }
-        
         .stars {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
+            background-image:
                 radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
                 radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
                 radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
@@ -32,143 +31,200 @@
             z-index: -1; pointer-events: none;
         }
 
-        /* --- HERO SECTION --- */
+        /* --- FLOATING HEARTS --- */
+        .hearts-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .heart {
+            position: absolute; bottom: -50px; opacity: 0;
+            animation: float-up linear forwards;
+            pointer-events: none; user-select: none;
+        }
+        @keyframes float-up {
+            0%   { transform: translateY(0) scale(0.5); opacity: 0; }
+            10%  { opacity: 0.6; }
+            90%  { opacity: 0.25; }
+            100% { transform: translateY(-105vh) scale(1.2); opacity: 0; }
+        }
+
+        /* --- HERO --- */
         .hero-section {
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            z-index: 10;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
+            position: relative; z-index: 10;
         }
-        
-        .hero-title { font-size: 3.5em; font-weight: 700; margin: 0; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
-        
-        /* --- FIXED: TITLE ANIMATION CSS --- */
-        .hero-subtitle { 
-            font-size: 2.5em; 
-            font-weight: 700; 
-            margin: 10px 0; 
-            min-height: 1.2em; /* Mencegah layout lompat */
-            background: linear-gradient(90deg, #ff758c, #ff7eb3); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            
-            /* INI YANG HILANG SEBELUMNYA: */
-            transition: opacity 1s ease-in-out;
-            opacity: 1;
-        }
+        .hero-title { font-size: 3.5em; font-weight: 700; margin: 0; text-shadow: 0 0 20px rgba(255,255,255,.3); }
 
-        .hero-subtitle.fade-out {
-            opacity: 0;
+        .hero-subtitle {
+            font-size: 2.5em; font-weight: 700; margin: 10px 0; min-height: 1.2em;
+            background: linear-gradient(90deg, #ff758c, #ff7eb3);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        /* ---------------------------------- */
+        .cursor {
+            display: inline-block;
+            -webkit-text-fill-color: #ff7eb3;
+            animation: blink 0.8s infinite;
+            margin-left: 2px;
+        }
+        @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
-        .cta-button { background: linear-gradient(90deg, #e75973, #b84592); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 30px; border: none; cursor: pointer; transition: transform 0.3s; }
+        /* --- DAYS COUNTER --- */
+        .days-counter {
+            margin: 20px 0;
+            display: flex; align-items: center; gap: 14px;
+            background: rgba(255,117,140,.1);
+            border: 1px solid rgba(255,117,140,.3);
+            border-radius: 50px; padding: 10px 28px;
+        }
+        .days-number {
+            font-size: 2.2em; font-weight: 700;
+            background: linear-gradient(90deg, #ff758c, #ff7eb3);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .days-label { font-size: 0.9em; color: #ccc; line-height: 1.4; text-align: left; }
+        .days-label strong { display: block; color: #fff; font-size: 1.05em; }
+
+        .cta-button {
+            background: linear-gradient(90deg, #e75973, #b84592);
+            color: white; padding: 15px 40px; border-radius: 50px;
+            text-decoration: none; font-weight: 600; margin-top: 30px;
+            border: none; cursor: pointer; transition: transform 0.3s;
+        }
         .cta-button:hover { transform: translateY(-5px); }
 
-        /* --- FLASHBACK SECTION (SORE STYLE) --- */
+        /* --- FLASHBACK SECTION (untouched) --- */
         #flashback-section {
-            height: 100vh;
-            display: none; 
-            position: relative;
-            background-color: #000;
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
+            height: 100vh; display: none; position: relative;
+            background-color: #000; overflow: hidden;
+            opacity: 0; transition: opacity 2s ease-in-out;
             perspective: 1000px;
         }
-
-        #flashback-section.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 1;
-        }
-
+        #flashback-section.active { display: flex; justify-content: center; align-items: center; opacity: 1; }
         .main-memory-container {
-            position: relative;
-            z-index: 10;
-            width: 300px;
-            height: 400px;
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.5);
-            background: #000;
+            position: relative; z-index: 10; width: 300px; height: 400px;
+            box-shadow: 0 0 50px rgba(255,255,255,.2); border-radius: 15px;
+            overflow: hidden; border: 2px solid rgba(255,255,255,.5); background: #000;
         }
-
         .main-flashback-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease-in-out; }
         .main-flashback-img.show { opacity: 1; }
-
         #flying-photos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .flying-photo { position: absolute; opacity: 0; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,.5); filter: grayscale(40%) sepia(20%); }
+        .vignette-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, #000 100%); z-index: 5; pointer-events: none; }
+        .flashback-text { position: absolute; bottom: 10%; font-size: 1.2em; color: rgba(255,255,255,.8); letter-spacing: 5px; text-transform: uppercase; z-index: 20; text-shadow: 0 0 10px rgba(255,255,255,.5); }
 
-        .flying-photo {
-            position: absolute; opacity: 0; border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            filter: grayscale(40%) sepia(20%);
-        }
-
-        .vignette-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 40%, #000 100%);
-            z-index: 5; pointer-events: none;
-        }
-
-        .flashback-text {
-            position: absolute; bottom: 10%; font-size: 1.2em;
-            color: rgba(255, 255, 255, 0.8); letter-spacing: 5px;
-            text-transform: uppercase; z-index: 20;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-
-        /* --- TIMELINE SECTION --- */
+        /* --- TIMELINE --- */
         .timeline-section { max-width: 1100px; margin: 0 auto; padding: 100px 20px; display: flex; flex-direction: column; gap: 120px; }
         .memory-row { display: flex; align-items: center; justify-content: space-between; gap: 50px; opacity: 0; transition: opacity 1s ease-out, transform 1s ease-out; }
         .memory-row.reverse { flex-direction: row-reverse; }
         .memory-content { flex: 1; transform: translateY(30px); transition: transform 1s ease-out; }
-        .memory-badge { display: inline-block; background: rgba(255, 117, 140, 0.2); color: #ff758c; padding: 8px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 600; margin-bottom: 20px; border: 1px solid rgba(255, 117, 140, 0.3); }
+        .memory-badge { display: inline-block; background: rgba(255,117,140,.2); color: #ff758c; padding: 8px 16px; border-radius: 20px; font-size: .85em; font-weight: 600; margin-bottom: 20px; border: 1px solid rgba(255,117,140,.3); }
         .memory-title { font-size: 2.5em; margin: 0 0 15px 0; font-weight: 700; }
         .memory-desc { color: #b0b0b0; font-size: 1.1em; line-height: 1.8; margin-bottom: 25px; }
-        .memory-image-wrapper { flex: 1; position: relative; transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-        .memory-img { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); display: block; }
+        .memory-image-wrapper { flex: 1; position: relative; transition: transform 1s cubic-bezier(.25,.46,.45,.94); }
+        .memory-img {
+            width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,.4);
+            display: block; cursor: zoom-in;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+        .memory-img:hover { transform: scale(1.03); box-shadow: 0 25px 55px rgba(255,117,140,.25); }
         .memory-row:not(.reverse) .memory-image-wrapper { transform: translateX(100px); }
         .memory-row.reverse .memory-image-wrapper { transform: translateX(-100px); }
         .memory-row.visible { opacity: 1; }
         .memory-row.visible .memory-content { transform: translateY(0); }
         .memory-row.visible .memory-image-wrapper { transform: translateX(0); }
 
-        /* --- MUSIC SECTION --- */
+        /* --- LIGHTBOX --- */
+        .lightbox {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,.92); z-index: 9999;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(12px); cursor: zoom-out;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 90vw; max-height: 90vh; border-radius: 14px;
+            box-shadow: 0 0 60px rgba(255,117,140,.2);
+            object-fit: contain;
+            animation: lb-in 0.3s ease;
+        }
+        @keyframes lb-in { from { opacity: 0; transform: scale(0.88); } to { opacity: 1; transform: scale(1); } }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 30px;
+            font-size: 2.5em; color: rgba(255,255,255,.6);
+            cursor: pointer; line-height: 1; transition: color 0.2s;
+        }
+        .lightbox-close:hover { color: #ff758c; }
+
+        /* --- MUSIC --- */
         .music-section { padding: 80px 20px 120px 20px; text-align: center; }
-        .music-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: 0.85em; margin-bottom: 15px; color: #ff758c; }
+        .music-badge { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: .85em; margin-bottom: 15px; color: #ff758c; }
         .music-title { font-size: 2.5em; margin: 0; background: linear-gradient(90deg, #ff758c, #ff7eb3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
-        .music-subtitle { color: #ccc; margin-top: 10px; margin-bottom: 50px; font-size: 0.95em; }
-        .music-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; width: 300px; padding: 20px; margin: 0 auto; text-align: left; transition: transform 0.3s; }
+        .music-subtitle { color: #ccc; margin-top: 10px; margin-bottom: 50px; font-size: .95em; }
+        .music-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.1); border-radius: 20px; width: 300px; padding: 20px; margin: 0 auto; text-align: left; transition: transform 0.3s; }
         .music-card:hover { transform: translateY(-5px); }
         .album-art { width: 100%; aspect-ratio: 1/1; background: linear-gradient(135deg, #e75973, #b84592); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-        .play-btn-card { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; }
-        .play-btn-card:hover { background: rgba(255,255,255,0.1); border-color: #ff758c; }
-
-        .music-control { position: fixed; bottom: 30px; right: 30px; z-index: 1000; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 15px rgba(255, 117, 140, 0.4); transition: transform 0.3s; }
+        .play-btn-card { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,.2); color: white; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; }
+        .play-btn-card:hover { background: rgba(255,255,255,.1); border-color: #ff758c; }
+        .music-control { position: fixed; bottom: 30px; right: 30px; z-index: 1000; background: rgba(255,255,255,.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,.2); width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 15px rgba(255,117,140,.4); transition: transform 0.3s; }
         .music-control.playing .music-icon { animation: spin 3s linear infinite; }
         .music-icon { width: 24px; height: 24px; fill: #ff758c; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
+        /* --- LOVE LETTER --- */
+        .letter-section { padding: 60px 20px 120px 20px; text-align: center; position: relative; z-index: 10; }
+        .letter-badge { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: .85em; margin-bottom: 15px; color: #ff758c; }
+        .letter-title { font-size: 2.5em; margin: 0 0 50px 0; background: linear-gradient(90deg, #ff758c, #ff7eb3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+        .letter-card {
+            max-width: 640px; margin: 0 auto;
+            background: rgba(255,117,140,.05);
+            border: 1px solid rgba(255,117,140,.2);
+            border-radius: 24px; padding: 50px 45px;
+            text-align: left; position: relative;
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .letter-card.visible { opacity: 1; transform: translateY(0); }
+        .letter-quote-mark {
+            font-family: 'Dancing Script', cursive;
+            font-size: 8em; color: rgba(255,117,140,.12);
+            position: absolute; top: -20px; left: 30px;
+            line-height: 1; pointer-events: none;
+        }
+        .letter-body {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.35em; line-height: 2; color: #e0c0c8;
+        }
+        .letter-signature { margin-top: 30px; text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.6em; color: #ff758c; }
+
+        /* --- FOOTER --- */
+        .footer { text-align: center; padding: 30px; color: rgba(255,255,255,.3); font-size: .8em; position: relative; z-index: 10; }
+
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.5em; }
+            .hero-title { font-size: 2.2em; }
+            .hero-subtitle { font-size: 1.8em; }
+            .days-number { font-size: 1.7em; }
             .memory-row { flex-direction: column-reverse !important; gap: 30px; margin-bottom: 80px; }
             .memory-row .memory-image-wrapper { transform: translateY(50px) !important; width: 100%; }
             .memory-row.visible .memory-image-wrapper { transform: translateY(0) !important; }
             .main-memory-container { width: 250px; height: 350px; }
+            .letter-card { padding: 35px 25px; }
+            .letter-body { font-size: 1.15em; }
         }
     </style>
 </head>
 <body>
 
     <div class="stars"></div>
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
 
     <audio id="bg-music" loop>
         <source src="{% static 'timeline/music.mp3' %}" type="audio/mpeg">
@@ -180,17 +236,28 @@
         </svg>
     </div>
 
+    <!-- HERO -->
     <div class="hero-section">
         <h1 class="hero-title">Our Love Story</h1>
-        <h2 class="hero-subtitle" id="dynamic-title">Vegard dan Mauri</h2>
-        <p style="max-width: 600px; line-height: 1.6; color: #ccc;">
+        <h2 class="hero-subtitle"><span id="dynamic-title"></span><span class="cursor">|</span></h2>
+
+        <div class="days-counter">
+            <div class="days-number" id="days-count">0</div>
+            <div class="days-label">
+                <strong>hari bersama</strong>
+                sejak 11 Maret 2024 ❤️
+            </div>
+        </div>
+
+        <p style="max-width:600px; line-height:1.6; color:#ccc; margin-top:10px;">
             Tempat menyimpan cerita, foto, dan lagu favorit kita berdua.
         </p>
-        <button class="cta-button" onclick="document.getElementById('timeline').scrollIntoView({behavior: 'smooth'});">
+        <button class="cta-button" onclick="document.getElementById('timeline').scrollIntoView({behavior:'smooth'});">
             Lihat Cerita Kita
         </button>
     </div>
 
+    <!-- TIMELINE -->
     <div id="timeline" class="timeline-section">
         {% for memory in memories %}
             <div class="memory-row {% if forloop.counter|divisibleby:2 %}reverse{% endif %}">
@@ -198,18 +265,19 @@
                     <div class="memory-badge">Kenangan #{{ forloop.counter }}</div>
                     <h2 class="memory-title">{{ memory.title }}</h2>
                     <p class="memory-desc">{{ memory.description }}</p>
-                    <div style="display:flex; gap:10px; color:#888; font-size:0.9em; align-items:center;">
+                    <div style="display:flex; gap:10px; color:#888; font-size:.9em; align-items:center;">
                         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span>{{ memory.date|date:"d F Y" }}</span>
                     </div>
                 </div>
                 <div class="memory-image-wrapper">
-                    <img src="{% static memory.image %}" class="memory-img" alt="{{ memory.title }}">
+                    <img src="{% static memory.image %}" class="memory-img" alt="{{ memory.title }}" onclick="openLightbox(this.src)">
                 </div>
             </div>
         {% endfor %}
     </div>
 
+    <!-- FLASHBACK (hidden, triggered by song at ~145s) -->
     <div id="flashback-section">
         <div class="vignette-overlay"></div>
         <div id="flying-photos-container"></div>
@@ -219,11 +287,11 @@
         <div class="flashback-text">Mengulang Waktu...</div>
     </div>
 
+    <!-- MUSIC -->
     <section class="music-section">
         <div class="music-badge">Our Playlist</div>
         <h1 class="music-title">Lagu Favorit Kita 🎵</h1>
         <p class="music-subtitle">Setiap lagu punya cerita dan kenangan tersendiri</p>
-
         <div class="music-card">
             <div class="album-art">
                 <svg width="60" height="60" viewBox="0 0 24 24" fill="white">
@@ -231,7 +299,7 @@
                 </svg>
             </div>
             <h3 style="font-size:1.2em; font-weight:700; margin:0; color:white;">Terbuang Dalam Waktu</h3>
-            <p style="color:#aaa; font-size:0.9em; margin:5px 0 20px 0;">Barasuara</p>
+            <p style="color:#aaa; font-size:.9em; margin:5px 0 20px 0;">Barasuara</p>
             <button class="play-btn-card" onclick="toggleMusic()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white" id="card-play-icon"><path d="M8 5v14l11-7z"/></svg>
                 <span id="card-play-text">Play Song</span>
@@ -239,26 +307,71 @@
         </div>
     </section>
 
+    <!-- LOVE LETTER -->
+    <section class="letter-section">
+        <div class="letter-badge">Untuk Kamu</div>
+        <h2 class="letter-title">Sebuah Surat Kecil</h2>
+        <div class="letter-card" id="letter-card">
+            <div class="letter-quote-mark">"</div>
+            <div class="letter-body">
+                Mauri,<br><br>
+                Terima kasih sudah menjadi bagian dari cerita ini.<br><br>
+                Setiap momen — dari yang kecil sampai yang besar — semuanya berarti
+                untukku. Kamu bukan cuma seseorang yang aku suka. Kamu adalah alasan
+                kenapa hari-hariku terasa lebih berwarna.<br><br>
+                Dan aku tidak sabar untuk membuat lebih banyak kenangan lagi bersamamu.
+            </div>
+            <div class="letter-signature">— Vegard ❤️</div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        Made with ❤️ for Mauri &nbsp;·&nbsp; {% now "Y" %}
+    </footer>
+
     <script>
-        /* --- FLASHBACK PHOTOS ARRAY --- */
+        /* --- FLASHBACK PHOTOS --- */
         const flashbackPhotos = [
-            {% for photo in flashback_photos %}
-                "{% static photo %}",
-            {% endfor %}
+            {% for photo in flashback_photos %}"{% static photo %}",{% endfor %}
         ];
 
-        /* --- AUDIO & TRIGGER LOGIC --- */
+        /* --- DAYS COUNTER --- */
+        (function () {
+            const start = new Date('2024-03-11');
+            const diff = Math.floor((new Date() - start) / 86400000);
+            document.getElementById('days-count').textContent = diff.toLocaleString('id-ID');
+        })();
+
+        /* --- FLOATING HEARTS --- */
+        const heartsContainer = document.getElementById('hearts-container');
+        const heartGlyphs = ['♥', '❤', '💕', '💗', '💓'];
+        function spawnHeart() {
+            const el = document.createElement('div');
+            el.classList.add('heart');
+            el.textContent = heartGlyphs[Math.floor(Math.random() * heartGlyphs.length)];
+            const size = Math.random() * 16 + 10;
+            const duration = Math.random() * 9 + 9;
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = size + 'px';
+            el.style.color = `rgba(255, ${Math.floor(Math.random() * 60 + 90)}, ${Math.floor(Math.random() * 60 + 120)}, ${(Math.random() * 0.35 + 0.15).toFixed(2)})`;
+            el.style.animationDuration = duration + 's';
+            heartsContainer.appendChild(el);
+            setTimeout(() => el.remove(), duration * 1000);
+        }
+        setInterval(spawnHeart, 1400);
+
+        /* --- MUSIC + FLASHBACK (original logic preserved) --- */
         const music = document.getElementById('bg-music');
         const musicBtn = document.querySelector('.music-control');
         const cardPlayText = document.getElementById('card-play-text');
-        
+        const cardPlayIcon = document.getElementById('card-play-icon');
+
         const flashbackSection = document.getElementById('flashback-section');
         const mainFlashbackImg = document.getElementById('main-flashback-img');
         const flyingContainer = document.getElementById('flying-photos-container');
-        
+
         let isFlashbackActive = false;
-        let mainPhotoInterval;
-        let flyingPhotoInterval;
+        let mainPhotoInterval, flyingPhotoInterval;
         let photoIndex = 0;
 
         const TIME_START_FADE = 144;
@@ -268,19 +381,12 @@
 
         music.addEventListener('timeupdate', () => {
             const t = music.currentTime;
-
-            if (t >= TIME_INITIAL && t < TIME_END && !isFlashbackActive) {
-                startFlashbackSequence();
-            }
-
+            if (t >= TIME_INITIAL && t < TIME_END && !isFlashbackActive) startFlashbackSequence();
             if (t >= TIME_PEAK && t < TIME_END && isFlashbackActive) {
-                document.querySelector('.main-memory-container').style.transform = "scale(1.15) rotate(2deg)";
-                document.querySelector('.main-memory-container').style.transition = "transform 10s ease";
+                document.querySelector('.main-memory-container').style.transform = 'scale(1.15) rotate(2deg)';
+                document.querySelector('.main-memory-container').style.transition = 'transform 10s ease';
             }
-
-            if (t >= TIME_END && isFlashbackActive) {
-                stopFlashbackSequence();
-            }
+            if (t >= TIME_END && isFlashbackActive) stopFlashbackSequence();
         });
 
         function startFlashbackSequence() {
@@ -304,35 +410,21 @@
 
         function createFlyingPhoto() {
             const img = document.createElement('img');
-            const randomSrc = flashbackPhotos[Math.floor(Math.random() * flashbackPhotos.length)];
-            img.src = randomSrc;
+            img.src = flashbackPhotos[Math.floor(Math.random() * flashbackPhotos.length)];
             img.classList.add('flying-photo');
-
-            const startX = Math.random() * 100;
-            const startY = Math.random() * 100;
             const size = Math.random() * 150 + 100;
-            
-            img.style.left = startX + 'vw';
-            img.style.top = startY + 'vh';
-            img.style.width = size + 'px';
-            
             const rotation = Math.random() * 360;
+            img.style.left = Math.random() * 100 + 'vw';
+            img.style.top  = Math.random() * 100 + 'vh';
+            img.style.width = size + 'px';
             img.style.transform = `rotate(${rotation}deg) scale(0)`;
             flyingContainer.appendChild(img);
-
-            const animationDuration = Math.random() * 3000 + 3000;
-
-            const keyframes = [
+            const dur = Math.random() * 3000 + 3000;
+            const anim = img.animate([
                 { transform: `rotate(${rotation}deg) scale(0)`, opacity: 0 },
                 { transform: `rotate(${rotation + 40}deg) scale(1)`, opacity: 0.6, offset: 0.2 },
                 { transform: `rotate(${rotation + 100}deg) scale(1.5) translateZ(100px)`, opacity: 0 }
-            ];
-
-            const anim = img.animate(keyframes, {
-                duration: animationDuration,
-                easing: 'ease-out'
-            });
-
+            ], { duration: dur, easing: 'ease-out' });
             anim.onfinish = () => img.remove();
         }
 
@@ -341,7 +433,7 @@
             clearInterval(mainPhotoInterval);
             clearInterval(flyingPhotoInterval);
             flyingContainer.innerHTML = '';
-            document.querySelector('.main-memory-container').style.transform = "scale(1)";
+            document.querySelector('.main-memory-container').style.transform = 'scale(1)';
             flashbackSection.style.opacity = '0';
             setTimeout(() => {
                 flashbackSection.classList.remove('active');
@@ -354,35 +446,67 @@
             if (music.paused) {
                 music.play();
                 musicBtn.classList.add('playing');
-                cardPlayText.textContent = "Pause Song";
+                cardPlayText.textContent = 'Pause Song';
+                cardPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
             } else {
                 music.pause();
                 musicBtn.classList.remove('playing');
-                cardPlayText.textContent = "Play Song";
+                cardPlayText.textContent = 'Play Song';
+                cardPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
             }
         }
 
-        /* --- TITLE LOOP ANIMATION (FIXED) --- */
-        const titles = [ "Untuk Aku dan Kamu.", "Our Story.", "Creating Memories." ];
-        let titleIdx = 0;
+        /* --- TYPEWRITER --- */
+        const titles = ['Untuk Aku dan Kamu.', 'Our Story.', 'Creating Memories.'];
+        let titleIdx = 0, charIdx = 0, isDeleting = false;
         const titleEl = document.getElementById('dynamic-title');
-        
-        setInterval(() => {
-            titleEl.classList.add('fade-out');
-            setTimeout(() => {
-                titleIdx = (titleIdx + 1) % titles.length;
-                titleEl.textContent = titles[titleIdx];
-                titleEl.classList.remove('fade-out');
-            }, 1000); // Tunggu 1 detik (sama dengan durasi CSS transition) lalu ganti teks
-        }, 4000); // Ulangi setiap 4 detik
+
+        function typeWriter() {
+            const current = titles[titleIdx];
+            if (isDeleting) {
+                titleEl.textContent = current.substring(0, charIdx - 1);
+                charIdx--;
+                if (charIdx === 0) {
+                    isDeleting = false;
+                    titleIdx = (titleIdx + 1) % titles.length;
+                    setTimeout(typeWriter, 400);
+                    return;
+                }
+                setTimeout(typeWriter, 45);
+            } else {
+                titleEl.textContent = current.substring(0, charIdx + 1);
+                charIdx++;
+                if (charIdx === current.length) {
+                    isDeleting = true;
+                    setTimeout(typeWriter, 2200);
+                    return;
+                }
+                setTimeout(typeWriter, 95);
+            }
+        }
+        typeWriter();
+
+        /* --- LIGHTBOX --- */
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
         /* --- SCROLL REVEAL --- */
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.2 });
-        document.querySelectorAll('.memory-row').forEach(row => observer.observe(row));
+        document.querySelectorAll('.memory-row').forEach(r => observer.observe(r));
+        observer.observe(document.getElementById('letter-card'));
     </script>
 
 </body>
