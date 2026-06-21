@@ -17,19 +17,8 @@
             min-height: 100vh;
         }
 
-        /* --- STARS --- */
-        @keyframes move-stars { from { background-position: 0 0, 40px 60px, 130px 270px; } to { background-position: 550px 550px, 390px 410px, 380px 520px; } }
-        .stars {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image:
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
-            animation: move-stars 60s linear infinite;
-            z-index: -1; pointer-events: none;
-        }
+        /* --- STARS (canvas) --- */
+        #stars-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
         /* --- FLOATING HEARTS --- */
         .hearts-container {
@@ -198,6 +187,42 @@
         }
         .letter-signature { margin-top: 30px; text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.6em; color: #ff758c; }
 
+        /* --- MUSIC HINT --- */
+        .music-hint { color: rgba(255,255,255,.35); font-size: .8em; text-align: center; margin-top: 14px; font-style: italic; letter-spacing: .5px; }
+
+        /* --- LOCKED TEASER --- */
+        .locked-section { padding: 0 20px 80px 20px; text-align: center; position: relative; z-index: 10; }
+        .locked-card {
+            max-width: 420px; margin: 0 auto;
+            background: rgba(255,255,255,.02);
+            border: 1px dashed rgba(255,255,255,.12);
+            border-radius: 20px; padding: 40px 30px;
+            transition: background 0.8s ease, border 0.8s ease;
+        }
+        .locked-card.unlocked {
+            background: rgba(255,117,140,.07);
+            border: 1px solid rgba(255,117,140,.3);
+        }
+        .lock-icon { font-size: 2.2em; margin-bottom: 10px; display: block; transition: transform 0.6s cubic-bezier(.34,1.56,.64,1); }
+        .locked-card.unlocked .lock-icon { transform: rotate(15deg) scale(1.2); }
+        .locked-label { font-size: 1em; font-weight: 600; color: rgba(255,255,255,.4); margin: 0 0 6px 0; transition: color 0.6s; }
+        .locked-card.unlocked .locked-label { color: #ff758c; }
+        .locked-sub { font-size: .82em; color: rgba(255,255,255,.22); font-style: italic; margin: 0; transition: opacity 0.4s; }
+        .locked-card.unlocked .locked-sub { opacity: 0; height: 0; overflow: hidden; }
+        .unlocked-body { display: none; font-family: 'Dancing Script', cursive; font-size: 1.25em; color: #e0c0c8; line-height: 1.9; margin-top: 16px; }
+        .locked-card.unlocked .unlocked-body { display: block; animation: fade-in-up 1s ease forwards; }
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- FLASHBACK PEAK MESSAGE --- */
+        .flashback-message {
+            position: absolute; bottom: 22%; left: 0; right: 0;
+            text-align: center; z-index: 25;
+            opacity: 0; transition: opacity 1.8s ease;
+            pointer-events: none;
+        }
+        .flashback-message.show { opacity: 1; }
+        .flashback-message p { margin: 4px 0; font-size: 1em; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,.75); text-shadow: 0 0 15px rgba(255,117,140,.6); }
+
         /* --- FOOTER --- */
         .footer { text-align: center; padding: 30px; color: rgba(255,255,255,.3); font-size: .8em; position: relative; z-index: 10; }
 
@@ -249,7 +274,7 @@
 </head>
 <body>
 
-    <div class="stars"></div>
+    <canvas id="stars-canvas"></canvas>
     <div class="hearts-container" id="hearts-container"></div>
 
     <!-- LIGHTBOX -->
@@ -317,6 +342,10 @@
             <img id="main-flashback-img" class="main-flashback-img" src="" alt="Main Memory">
         </div>
         <div class="flashback-text">Mengulang Waktu...</div>
+        <div class="flashback-message" id="flashback-message">
+            <p>momen ini</p>
+            <p>selalu bikin aku inget kamu ❤️</p>
+        </div>
     </div>
 
     <!-- MUSIC -->
@@ -336,6 +365,20 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white" id="card-play-icon"><path d="M8 5v14l11-7z"/></svg>
                 <span id="card-play-text">Play Song</span>
             </button>
+            <p class="music-hint">dengerin sampai habis... ada yang spesial 🎵</p>
+        </div>
+    </section>
+
+    <!-- LOCKED TEASER -->
+    <section class="locked-section">
+        <div class="locked-card" id="locked-card">
+            <span class="lock-icon" id="lock-icon">🔒</span>
+            <p class="locked-label" id="locked-label">Rahasia tersembunyi di sini</p>
+            <p class="locked-sub">dengerin lagunya sampai habis untuk membukanya...</p>
+            <div class="unlocked-body" id="unlocked-body">
+                ini bagian dari lagu yang selalu bikin aku mikirin kamu.<br>
+                makasih udah dengerin sampai sini. 🎵
+            </div>
         </div>
     </section>
 
@@ -363,6 +406,55 @@
     </footer>
 
     <script>
+        /* --- CANVAS STARS --- */
+        (function () {
+            const canvas = document.getElementById('stars-canvas');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            function initStars() {
+                stars = [];
+                const count = Math.min(Math.floor((canvas.width * canvas.height) / 5000), 300);
+                for (let i = 0; i < count; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 1.4 + 0.2,
+                        baseOpacity: Math.random() * 0.55 + 0.2,
+                        speed: Math.random() * 0.1 + 0.02,
+                        twinkleSpeed: Math.random() * 0.02 + 0.004,
+                        phase: Math.random() * Math.PI * 2,
+                    });
+                }
+            }
+
+            let t = 0;
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                t += 0.016;
+                stars.forEach(s => {
+                    s.y -= s.speed;
+                    if (s.y < -2) { s.y = canvas.height + 2; s.x = Math.random() * canvas.width; }
+                    const opacity = s.baseOpacity * (0.55 + 0.45 * Math.sin(t * s.twinkleSpeed * 60 + s.phase));
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+
+            resize();
+            initStars();
+            draw();
+            window.addEventListener('resize', () => { resize(); initStars(); });
+        })();
+
         /* --- FLASHBACK PHOTOS --- */
         const flashbackPhotos = [
             {% for photo in flashback_photos %}"{% static photo %}",{% endfor %}
@@ -418,6 +510,7 @@
             if (t >= TIME_PEAK && t < TIME_END && isFlashbackActive) {
                 document.querySelector('.main-memory-container').style.transform = 'scale(1.15) rotate(2deg)';
                 document.querySelector('.main-memory-container').style.transition = 'transform 10s ease';
+                document.getElementById('flashback-message').classList.add('show');
             }
             if (t >= TIME_END && isFlashbackActive) stopFlashbackSequence();
         });
@@ -467,11 +560,17 @@
             clearInterval(flyingPhotoInterval);
             flyingContainer.innerHTML = '';
             document.querySelector('.main-memory-container').style.transform = 'scale(1)';
+            document.getElementById('flashback-message').classList.remove('show');
             flashbackSection.style.opacity = '0';
             setTimeout(() => {
                 flashbackSection.classList.remove('active');
                 flashbackSection.style.opacity = '';
-                document.getElementById('timeline').scrollIntoView({ behavior: 'smooth' });
+                // Unlock the teaser card
+                const card = document.getElementById('locked-card');
+                card.classList.add('unlocked');
+                document.getElementById('lock-icon').textContent = '💌';
+                document.getElementById('locked-label').textContent = 'Pesan tersembunyi terbuka';
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 2000);
         }
 
