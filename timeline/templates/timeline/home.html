@@ -83,19 +83,28 @@
         }
         .cta-button:hover { transform: translateY(-5px); }
 
-        /* --- FLASHBACK SECTION (untouched) --- */
+        /* --- FLASHBACK SECTION --- */
         #flashback-section {
-            height: 100vh; display: none; position: relative;
-            background-color: #000; overflow: hidden;
-            opacity: 0; transition: opacity 2s ease-in-out;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background-color: transparent; overflow: hidden;
+            opacity: 0; pointer-events: none;
+            transition: opacity 1.8s ease-in-out, background-color 1.8s ease-in-out;
             perspective: 1000px;
+            z-index: 500;
         }
-        #flashback-section.active { display: flex; justify-content: center; align-items: center; opacity: 1; }
+        #flashback-section.active {
+            opacity: 1; pointer-events: all;
+            background-color: #000;
+        }
         .main-memory-container {
             position: relative; z-index: 10; width: 300px; height: 400px;
             box-shadow: 0 0 50px rgba(255,255,255,.2); border-radius: 15px;
             overflow: hidden; border: 2px solid rgba(255,255,255,.5); background: #000;
+            transform: scale(0.8);
+            transition: transform 1.2s cubic-bezier(.34,1.15,.64,1);
         }
+        #flashback-section.active .main-memory-container { transform: scale(1); }
         .main-flashback-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease-in-out; }
         .main-flashback-img.show { opacity: 1; }
         #flying-photos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
@@ -244,8 +253,9 @@
             .memory-desc { font-size: 1em; }
 
             /* Flashback */
-            .main-memory-container { width: 220px; height: 300px; }
-            .flashback-text { font-size: 0.9em; letter-spacing: 3px; }
+            .main-memory-container { width: 200px; height: 280px; }
+            .flashback-text { font-size: 0.85em; letter-spacing: 3px; }
+            .flashback-message p { font-size: .85em; letter-spacing: 2px; }
 
             /* Music */
             .music-section { padding: 60px 16px 80px 16px; }
@@ -518,7 +528,6 @@
         function startFlashbackSequence() {
             isFlashbackActive = true;
             flashbackSection.classList.add('active');
-            flashbackSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             changeMainPhoto();
             mainPhotoInterval = setInterval(changeMainPhoto, 1200);
             createFlyingPhoto();
@@ -559,19 +568,18 @@
             clearInterval(mainPhotoInterval);
             clearInterval(flyingPhotoInterval);
             flyingContainer.innerHTML = '';
-            document.querySelector('.main-memory-container').style.transform = 'scale(1)';
+            document.querySelector('.main-memory-container').style.transform = '';
+            document.querySelector('.main-memory-container').style.transition = '';
             document.getElementById('flashback-message').classList.remove('show');
-            flashbackSection.style.opacity = '0';
+            flashbackSection.classList.remove('active'); // CSS transition handles the fade
             setTimeout(() => {
-                flashbackSection.classList.remove('active');
-                flashbackSection.style.opacity = '';
-                // Unlock the teaser card
+                flyingContainer.innerHTML = '';
                 const card = document.getElementById('locked-card');
                 card.classList.add('unlocked');
                 document.getElementById('lock-icon').textContent = '💌';
                 document.getElementById('locked-label').textContent = 'Pesan tersembunyi terbuka';
                 card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 2000);
+            }, 1900);
         }
 
         function toggleMusic() {
