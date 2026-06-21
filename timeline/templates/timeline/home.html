@@ -203,15 +203,47 @@
 
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.2em; }
-            .hero-subtitle { font-size: 1.8em; }
-            .days-number { font-size: 1.7em; }
-            .memory-row { flex-direction: column-reverse !important; gap: 30px; margin-bottom: 80px; }
-            .memory-row .memory-image-wrapper { transform: translateY(50px) !important; width: 100%; }
+            /* Hero */
+            .hero-title { font-size: 2.1em; }
+            .hero-subtitle { font-size: 1.7em; }
+            .days-counter { flex-direction: column; gap: 4px; text-align: center; padding: 14px 28px; border-radius: 20px; }
+            .days-number { font-size: 2.4em; }
+            .days-label { text-align: center; }
+
+            /* Timeline */
+            .timeline-section { padding: 60px 16px; gap: 70px; }
+            .memory-row { flex-direction: column-reverse !important; gap: 24px; }
+            .memory-row .memory-image-wrapper { transform: translateY(40px) !important; width: 100%; }
             .memory-row.visible .memory-image-wrapper { transform: translateY(0) !important; }
-            .main-memory-container { width: 250px; height: 350px; }
-            .letter-card { padding: 35px 25px; }
-            .letter-body { font-size: 1.15em; }
+            .memory-title { font-size: 1.8em; }
+            .memory-desc { font-size: 1em; }
+
+            /* Flashback */
+            .main-memory-container { width: 220px; height: 300px; }
+            .flashback-text { font-size: 0.9em; letter-spacing: 3px; }
+
+            /* Music */
+            .music-section { padding: 60px 16px 80px 16px; }
+            .music-title { font-size: 1.9em; }
+            .music-card { width: auto; max-width: 100%; }
+
+            /* Letter */
+            .letter-section { padding: 40px 16px 80px 16px; }
+            .letter-title { font-size: 1.9em; margin-bottom: 30px; }
+            .letter-card { padding: 35px 22px; }
+            .letter-body { font-size: 1.1em; }
+            .letter-quote-mark { font-size: 5em; }
+
+            /* Floating button */
+            .music-control { bottom: 20px; right: 16px; width: 44px; height: 44px; }
+        }
+
+        @media (max-width: 420px) {
+            .hero-title { font-size: 1.75em; }
+            .hero-subtitle { font-size: 1.35em; }
+            .days-number { font-size: 2em; }
+            .memory-title { font-size: 1.5em; }
+            .cta-button { padding: 13px 30px; font-size: 0.95em; }
         }
     </style>
 </head>
@@ -245,7 +277,7 @@
             <div class="days-number" id="days-count">0</div>
             <div class="days-label">
                 <strong>hari bersama</strong>
-                sejak 11 Maret 2024 ❤️
+                sejak 13 Maret 2023 ❤️
             </div>
         </div>
 
@@ -315,11 +347,12 @@
             <div class="letter-quote-mark">"</div>
             <div class="letter-body">
                 Mauri,<br><br>
-                Terima kasih sudah menjadi bagian dari cerita ini.<br><br>
-                Setiap momen — dari yang kecil sampai yang besar — semuanya berarti
-                untukku. Kamu bukan cuma seseorang yang aku suka. Kamu adalah alasan
-                kenapa hari-hariku terasa lebih berwarna.<br><br>
-                Dan aku tidak sabar untuk membuat lebih banyak kenangan lagi bersamamu.
+                Makasih udah selalu ada buat aku.<br><br>
+                Setiap momen yang aku lewati sama kamu, mulai dari telponan tengah malem
+                sampe main keliling Jakarta bener bener terukir di hati aku. Kamu bukan cuman sekedar
+                orang yang aku suka, tapi kamu juga adalah alasan buat aku untuk bisa bertahan sampe saat ini.
+                Aku gak nyangka bisa bareng kamu selama ini huhuhu. <br><br>
+                Aku janji bakal terus sayang sama kamu, dan bikin kamu bahagia. I love you as always, and I hope we can make more memories together. <br><br>
             </div>
             <div class="letter-signature">— Vegard ❤️</div>
         </div>
@@ -337,7 +370,7 @@
 
         /* --- DAYS COUNTER --- */
         (function () {
-            const start = new Date('2024-03-11');
+            const start = new Date('2023-03-13');
             const diff = Math.floor((new Date() - start) / 86400000);
             document.getElementById('days-count').textContent = diff.toLocaleString('id-ID');
         })();
